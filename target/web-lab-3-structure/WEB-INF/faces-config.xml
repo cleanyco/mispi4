@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                                  http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+    <managed-bean>
+        <managed-bean-name>processorBean</managed-bean-name>
+        <managed-bean-class>beans.Processor</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>clock</managed-bean-name>
+        <managed-bean-class>beans.Clock</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>
+    
+    <navigation-rule>
+        <from-view-id>/views/intro.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-outcome>to_main</from-outcome>
+            <to-view-id>/views/main.xhtml</to-view-id>
+        </navigation-case>
+
+        <navigation-case>
+            <from-outcome>to_index</from-outcome>
+            <to-view-id>/views/intro.xhtml</to-view-id>
+        </navigation-case>
+        </navigation-rule>
+        <navigation-rule>
+            <from-view-id>/views/main.xhtml</from-view-id>
+            <navigation-case>
+                <from-outcome>to_index</from-outcome>
+                <to-view-id>/views/intro.xhtml</to-view-id>
+            </navigation-case>    
+        </navigation-rule>
+</faces-config>

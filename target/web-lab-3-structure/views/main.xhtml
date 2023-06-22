@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough" xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<title>LAB3</title>
+    <style>
+        header {
+            border: 1px solid black;
+            color: black;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            background-color: #DAE2DF;
+        }
+
+        body {
+            font-family: "Roboto", sans-serif;
+            background-color: #C5D5E4;
+        }
+
+        canvas {
+            margin-left: 100px;
+            position: absolute;
+        }
+
+        .container {
+            left: 325px;
+
+            position: absolute;
+            margin-top: 100px;
+
+            width: 823px;
+            height: 400px;
+
+            background-color: #DAE2DF;
+        }
+
+        .input-block {
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+        #message {
+            position: absolute;
+            left: 10px;
+            top: 300px;
+            font-size: smaller;
+        }
+
+        table {
+            border-collapse: collapse;
+
+            position: absolute;
+
+            top: 600px;
+            left: 430px;
+
+            font-size: smaller;
+        }
+
+        .hit-table {
+            max-height: 300px;
+
+            overflow-y: scroll;
+        }
+
+        thead {
+            border: 1px solid black;
+        }
+
+        tr {
+            border: 1px solid black;
+        }
+
+        td {
+
+            border: 1px solid black;
+        }
+
+        th {
+            border: 1px solid black;
+        }
+    </style>
+</h:head>
+    <h:body>
+        <header>
+            Чесноков Аркадий P3211
+            Вариант 91768
+        </header>
+            <div class="container">
+                <div class="input-block">
+                    <h:form id="coordinates-form">
+                        <fieldset>Введите координаты (пожалуйста)</fieldset>
+                        <fieldset>
+                            X:
+                            <p:inputText id="x-value" class="x-value" value="#{slider.value}" readonly="true" required="true"/>
+                            <p:slider for="x-value" minValue="-4.9" maxValue="4.9" step="0.1"></p:slider>
+                        </fieldset>
+                        <fieldset>
+                            Y:
+                                <p:inputText id="y-value" styleClass="block" required="true" autocomplete="false" placeholder="(-3..3)"/>
+                        </fieldset>
+                        <fieldset>
+                            R:
+                            <div>
+                                <p:commandButton class="submit" type="button" value="1" onclick="confirmRadius(1)"></p:commandButton>
+                                <p:commandButton class="submit" update="result-table" type="button" value="1.5" onclick="confirmRadius(1.5)"></p:commandButton>
+                                <p:commandButton class="submit" update="result-table" type="button" value="2" onclick="confirmRadius(2)"></p:commandButton>
+                                <p:commandButton class="submit" update="result-table" type="button" value="2.5" onclick="confirmRadius(2.5)"></p:commandButton>
+                                <p:commandButton class="submit" update="result-table" type="button" value="3" onclick="confirmRadius(3)"></p:commandButton>
+                            </div>
+                        </fieldset>
+                        <fieldset id = "current_r" style="font-size: smaller">
+                            Текущий радиус:
+                        </fieldset>
+                        <fieldset>
+                            <h:button value="Перейти на интро-страницу" outcome="to_index"/>
+                        </fieldset>
+                    </h:form>
+                </div>
+                <canvas id="chart" height="400px" width="400px" style="z-index: 10"></canvas>
+                <canvas id="chartDrawer" height="400px" width="400px"></canvas>
+                <div id="message"></div>
+
+                <h:form id="form_hidden" style="display: none">
+                    <h:inputHidden id="x_hidden" value="#{processorBean.hit.x}"/>
+                    <h:inputHidden id="y_hidden" value="#{processorBean.hit.y}"/>
+                    <h:inputHidden id="r_hidden" value="#{processorBean.hit.r}"/>
+
+                    <h:inputHidden id="length_hidden"/>
+                    <h:inputHidden id="pagination_button_hidden" />
+
+                    <h:commandButton id="button_hidden" action="#{processorBean.addHit()}">
+                        <f:ajax execute="@form" onevent="
+                                    (data) => {
+                                        if (data.status === 'success') {
+                                              drawHit()
+                                        }
+                                    }
+                        " render="result-table"/>
+                    </h:commandButton>
+                </h:form>
+            </div>
+                   <h:dataTable id="result-table" styleClass="hit-table" value="#{processorBean.getHits()}" var="result">
+                       <h:column>
+                           <f:facet name="header">Время нажатия</f:facet>
+                           #{result.getCurrentTime()}
+                       </h:column>
+                       <h:column>
+                           <f:facet name="header">Значение X</f:facet>
+                           #{result.getX()}
+                       </h:column>
+                       <h:column>
+                           <f:facet name="header">Значение Y</f:facet>
+                           #{result.getY()}
+                       </h:column>
+                       <h:column>
+                           <f:facet name="header">Значение R</f:facet>
+                           #{result.getR()}
+                       </h:column>
+                       <h:column id="hit_column">
+                           <f:facet name="header">Попадание</f:facet>
+                           #{result.getHit()}
+                       </h:column>
+                       <h:column>
+                           <f:facet name="header">Время работы скрипта</f:facet>
+                           #{result.getExecutionTime()}
+                       </h:column>
+                   </h:dataTable>
+        <script defer="defer" src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script defer="defer" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script defer="defer" src="../validator.js"></script>
+        <script defer="defer" src="../interactive-element.js"></script>
+        <script defer="defer" src="../chart-drawer.js"></script>
+    </h:body>
+</html>

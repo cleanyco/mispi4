@@ -31,10 +31,7 @@
 
     <target name="build" depends="compile">
         <echo message="--- DU HASST ---"/>
-        <jar destfile="${dest.jar}" basedir="${compiled.classes}" compress="false" index="true">
-            <manifest>
-                <attribute name="Main-Class" value="com.company.Main"/>
-            </manifest>
+        <jar destfile="${dest.jar}" basedir="${compiled.classes}" manifest="src/META-INF/MANIFEST.MF" compress="false" index="true">
         </jar>
     </target>
 
@@ -66,9 +63,8 @@
 
     <target name="music" depends="build">
         <echo message="--- RAMMSTEIN ---"/>
-        <exec executable="cmd">
-            <arg value="/c"/>
-            <arg value="${musicPlayer} ${music}"/>
+        <exec executable="${musicPlayer}">
+            <arg value="${music}"/>
             <arg value="-p"/>
         </exec>
     </target>

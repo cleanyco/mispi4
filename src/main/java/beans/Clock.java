@@ -21,6 +21,7 @@ public class Clock {
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
+
     public void updateTime(){
         this.dateTime = LocalDateTime.now();
     }

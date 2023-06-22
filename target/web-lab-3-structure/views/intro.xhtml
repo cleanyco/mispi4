@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough" xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+    <title>LAB3</title>
+
+</h:head>
+<h:body>
+    <header>
+        Чесноков Аркадий P3211
+        Вариант 91768
+
+        <h:form>
+            <h:outputText id="clock" value="Текущее время: #{clock.dateTime}"/>
+            <p:poll interval="6" listener="#{clock.updateTime()}" update="clock"> </p:poll>
+        </h:form>
+    </header>
+    <h:button value="Перейти на главную страницу" outcome="to_main"/>
+
+</h:body>
+</html>
